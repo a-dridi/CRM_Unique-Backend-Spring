@@ -1,0 +1,11 @@
+## default connection pool
+spring.datasource.hikari.connectionTimeout=20000
+spring.datasource.hikari.maximumPoolSize=5
+
+## PostgreSQL
+spring.datasource.url=jdbc:postgresql://localhost:5432/crmunique
+spring.datasource.username=YOUR_USERNAME
+spring.datasource.password=YOUR_PASSWORD
+
+#drop and create table again, good for testing, comment this in production - Or use "update" in production. 
+spring.jpa.hibernate.ddl-auto=create
