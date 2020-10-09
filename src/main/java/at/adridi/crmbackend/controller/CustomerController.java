@@ -19,6 +19,10 @@ import at.adridi.crmbackend.exceptions.DataValueNotFoundException;
 import at.adridi.crmbackend.model.Customer;
 import at.adridi.crmbackend.service.CustomerService;
 import at.adridi.crmbackend.util.ApiUrls;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.NoArgsConstructor;
 import static org.springframework.http.ResponseEntity.status;
 
@@ -26,7 +30,7 @@ import static org.springframework.http.ResponseEntity.status;
  *
  * REST API end point for managing Customers and their CustomerNote objects and
  * CommunicationMessage objects.
- * 
+ *
  * API: /api/customer/
  *
  * @author A.Dridi
@@ -88,8 +92,17 @@ public class CustomerController {
     }
 
     @PostMapping(ApiUrls.BASE_API_URI + ApiUrls.CUSTOMER_URI + "/add")
-    public ResponseEntity<String> addCustomer(@RequestBody Customer newCustomer) {
-        int resultCode = this.customerService.save(newCustomer);
+    public ResponseEntity<String> addCustomer(@RequestBody String newCustomerJson) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Customer newCustomer;
+        int resultCode;
+        try {
+            newCustomer = objectMapper.readValue(newCustomerJson, Customer.class);
+            resultCode = this.customerService.save(newCustomer);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
+            resultCode = 4;
+        }
 
         switch (resultCode) {
             case 0:
@@ -101,6 +114,9 @@ public class CustomerController {
             case 3:
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body("ERROR. Customer E-Mail already exists! Please select another e-mail.");
+            case 4:
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("ERROR. The JSON object string could not be processed.");
             default:
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ERROR. Customer could not be saved!");
         }
