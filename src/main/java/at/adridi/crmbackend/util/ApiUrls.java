@@ -17,5 +17,8 @@ public class ApiUrls {
     public static final String CUSTOMER_URI = "/customer";
     public static final String CUSTOMERNOTE_URI = "/customernote";
     public static final String COMMUNICATIONMESSAGE_URI = "/communicationmessage";
+        public static final String COMMUNICATIONTYPE_URI = "/communicationtype";
+
+    
 
 }

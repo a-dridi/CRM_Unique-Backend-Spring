@@ -123,7 +123,7 @@ public class CustomerController {
     }
 
     @PutMapping(ApiUrls.BASE_API_URI + ApiUrls.CUSTOMER_URI + "/update/{id}")
-    public ResponseEntity<String> updateOwner(@PathVariable Long id, @RequestBody Customer customer) {
+    public ResponseEntity<String> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
         int resultCode = this.customerService.update(customer);
 
         switch (resultCode) {
@@ -143,7 +143,7 @@ public class CustomerController {
     }
 
     @DeleteMapping(ApiUrls.BASE_API_URI + ApiUrls.CUSTOMER_URI + "/delete/{id}")
-    public ResponseEntity<String> deleteAccountType(@PathVariable Long customerId) {
+    public ResponseEntity<String> deleteCustomer(@PathVariable Long customerId) {
         if (this.customerService.deleteById(customerId)) {
             return ResponseEntity.ok("Your customer was deleted successfully.");
         } else {
